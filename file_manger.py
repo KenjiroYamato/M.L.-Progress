@@ -11,6 +11,13 @@ class File_Maneger():
         self.source = dir
 
     def dataset_testset_selector(self, ratio, dir_data, dir_test):
+        """@param ratio: que porcentaje de los archivos de cada carpeta va a ir para el dataset
+        @param dir_data: la direccion de la carpeta donde van a ir los archivos del data set
+        @param dir_test: la direccion de la carpeta donde van a ir los archivos del test set
+        
+        dada la carpeta padre, se suponen que: todos los archivos de las carpetas hijos son necesarias para el data set y el data test
+        ademas toma la misma cantidad de archivos de cada carpeta para las carpetas del data set y data test
+        """
         list_folders_sons = os.listdir(self.source)
         n_files_by_folder = self.same_num_of_files_in_N_folders()
 
@@ -20,7 +27,7 @@ class File_Maneger():
         i_n_folder = 0
 
         if (len(os.listdir(dir_data)) + len(os.listdir(dir_test)) > 0):
-            print('los archivos ya estan cargados')
+            print('los archivos ya estan cargados o hay archivos en la carpeta destino')
             return
 
         for current_name in list_folders_sons:  #itera en cada carperpeta hija
@@ -54,6 +61,10 @@ class File_Maneger():
                   len(os.listdir(dir_test)) == i_file else 'Error numero de archivos')
 
     def same_num_of_files_in_N_folders(self):
+        """Dada una direccion (carpeta padre), todos las carpetas dentro de la carpeta padre se les obligara
+          a tener el mismo numero (ese munero es igual a la carpeta con menor numero de archivos) de archivos dentro de cada una de ellas.
+          elimina los archivos basado en un criterio de aleatoriedad
+          @return: el numero de archivos en cada una de las carpetas hijo"""
         n_min = math.inf
         len_each_folder = []
         are_all_same = False

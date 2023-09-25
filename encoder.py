@@ -8,9 +8,10 @@ class Encoder_NN():
     def __init__(self) -> None:
         pass
 
-    def png_to_npArray_grayscale(self, dir_source, dir_to_save, name_of_file=''):
+    def png_to_npArray_grayscale(self, dir_source, dir_to_save, name_of_file='', dir_to_save_labels='', name_labels_file=''):
 
-        if os.path.exists(f"{dir_to_save}/{name_of_file}.npy"):
+        if os.path.exists(f"{dir_to_save}/{name_of_file}.npy") and os.path.exists(
+                f"{dir_to_save_labels}/{name_labels_file}.npy"):
             print("El archivo ya existe")
             return
 
@@ -20,11 +21,17 @@ class Encoder_NN():
 
         file = np.array([], dtype=np.uint8)
 
+        file_labels = np.array([], dtype=np.uint8)
+
         flag = True
 
         i = 0
 
         for png in list_files_png:
+
+            current_number = int(png.split("_")[0])
+
+            file_labels = np.append(file_labels, current_number)
 
             current_png = f"{main_folder}/{png}"
 
@@ -50,9 +57,10 @@ class Encoder_NN():
             i += 1
 
         np.save(f"{dir_to_save}/{name_of_file}", file)
+        np.save(f"{dir_to_save_labels}/{name_labels_file}", file_labels)
 
 
 if __name__ == '__main__':
     encoder = Encoder_NN()
-    #encoder.png_to_npArray_grayscale("./res/dataset", "./res", 'data_set')
-    encoder.png_to_npArray_grayscale("./res/testset", "./res", 'test_set')
+    encoder.png_to_npArray_grayscale("./res/dataset", "./res", 'data_set', "./res", "data_set_labels")
+    encoder.png_to_npArray_grayscale("./res/testset", "./res", 'test_set', "./res", "test_set_labels")
